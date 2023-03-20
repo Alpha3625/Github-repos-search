@@ -16,7 +16,8 @@ form.addEventListener('submit', async (e) => {
     .then(response => response.json())
     .then(data => {
       if (data.total_count === null) {
-        return searchResult.innerHTML = '<li>Nothing found</li>';
+        searchResult.innerHTML = '<li>Nothing found</li>';
+        return ;
       }
       
       searchResult.innerHTML = '';
