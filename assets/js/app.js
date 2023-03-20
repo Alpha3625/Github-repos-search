@@ -15,10 +15,10 @@ form.addEventListener('submit', async (e) => {
     fetch(`https://api.github.com/search/repositories?q=${request.name}&per_page=10`)
     .then(response => response.json())
     .then(data => {
-      if (data === null) {
-        return  searchResult.innerHTML = '<li>Nothing found</li>';
+      if (data.total_count === null) {
+        return searchResult.innerHTML = '<li>Nothing found</li>';
       }
-
+      
       searchResult.innerHTML = '';
       data.items.forEach(item => {
         const li = document.createElement('li');
@@ -27,28 +27,12 @@ form.addEventListener('submit', async (e) => {
         link.target = '_blank';
         link.textContent = item.name;
         li.appendChild(link);
-        const dataOfCreation = document.createElement('p');
-        dataOfCreation.textContent = `Дата создания репозитория: ${formateDate(data)}`
         const desc = document.createElement('p');
         desc.textContent = item.description || 'No project description';
-        li.appendChild(dataOfCreation);
         li.appendChild(desc);
         searchResult.appendChild(li);
       });
     }).catch(() => searchResult.innerHTML = '<li>Error loading data<li>');
-
-    function formateDate(date){
-      let d = new Date(date);
-      d = [
-          '0' + d.getDate(),
-          '0' + (d.getMonth() + 1),
-          '' + d.getFullYear(),
-          '0' + d.getHours(),
-          '0' + d.getMinutes()
-          ].map(el => el.slice(-2))
-          return `${d.slice(0, 3).join(".")} ${d.slice(3).join(":")}`
-  }
-
 });
 
 // Строка поиска
